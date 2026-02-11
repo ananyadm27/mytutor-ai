@@ -41,13 +41,13 @@ This system integrates a local Large Language Model (Ollama + Mistral) with a Fl
 ## 📸 Screenshots
 
 ### 🔐 Login Page
-![Login](static/screenshots/login.png)
+![Login](static/login.png)
 
 ### 💬 Chat Interface
-![Chat](static/screenshots/chat.png)
+![Chat](static/chat.png)
 
 ### 📊 Dashboard
-![Dashboard](static/screenshots/dashboard.png)
+![Dashboard](static/dashboard.png)
 
 ---
 
