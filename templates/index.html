@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI English Tutor</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="navbar">
+    <h1>MyTutor AI</h1>
+    <div class="nav-links">
+        <a href="/chat">Chat</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/history">History</a>
+        <a href="/export">Export</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="chat-container">
+    <h2>Welcome, {{ user }}</h2>
+
+    <div id="chat-box"></div>
+
+    <div class="input-area">
+        <input type="text" id="message" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
+        <button onclick="startVoice()">🎤</button>
+    </div>
+    
+  
+
+</div>
+
+<script>
+const user = "{{ user }}";
+
+function sendMessage() {
+    const message = document.getElementById("message").value;
+    const chatBox = document.getElementById("chat-box");
+
+    chatBox.innerHTML += `<div class="user-msg">${message}</div>`;
+    chatBox.innerHTML += `<div class="bot-msg typing">Tutor is typing...</div>`;
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+    chatBox.lastElementChild.style.opacity = 0;
+setTimeout(() => {
+    chatBox.lastElementChild.style.opacity = 1;
+}, 100);
+
+    fetch("/ask", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({user: user, message: message})
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        const typingElement = document.querySelector(".typing");
+        typingElement.remove();
+
+        chatBox.innerHTML += `<div class="bot-msg">${data.reply}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        speak(data.reply);
+        document.getElementById("message").value = "";
+    });
+}
+
+
+function speak(text) {
+    const speech = new SpeechSynthesisUtterance(text);
+    speechSynthesis.speak(speech);
+}
+
+function startVoice() {
+    const recognition = new webkitSpeechRecognition();
+    recognition.onresult = function(event) {
+        document.getElementById("message").value =
+        event.results[0][0].transcript;
+    };
+    recognition.start();
+}
+function clearChat() {
+    document.getElementById("chat-box").innerHTML = "";
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Progress Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="navbar">
+    <h1>MyTutor AI</h1>
+    <div class="nav-links">
+        <a href="/chat">Chat</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/history">History</a>
+        <a href="/export">Export</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="chat-container">
+    <h2>📊 Progress Dashboard - {{ user }}</h2>
+   
+    <div class="stats-box">
+        <p>Total Messages: <b>{{ total_messages }}</b></p>
+        <p>Total Grammar Mistakes: <b>{{ mistakes }}</b></p>
+        <p>Correct Sentences: <b>{{ correct_messages }}</b></p>
+        <p>Accuracy: <b>{{ accuracy }}%</b></p>
+        <p>Performance Level: <b>{{ performance }}</b></p>
+    </div>
+
+    <!-- Bar Chart -->
+    <canvas id="progressChart"></canvas>
+
+    <!-- Daily Practice Line Chart -->
+    <canvas id="dailyChart"></canvas>
+
+   <div class="action-buttons">
+    <a href="/reset" class="btn btn-danger">🔄 Reset Progress</a>
+    <a href="/chat" class="btn btn-primary">⬅ Back to Chat</a>
+</div>
+
+</div>
+
+<script>
+/* -------- Bar Chart -------- */
+const ctx = document.getElementById('progressChart').getContext('2d');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Correct Sentences', 'Grammar Mistakes'],
+        datasets: [{
+            data: [{{ correct_messages|tojson }}, {{ mistakes|tojson }}],
+            backgroundColor: ['#4CAF50', '#F44336']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } }
+    }
+});
+
+/* -------- Daily Line Chart -------- */
+const dailyData = {{ daily_data|tojson }};
+const dates = dailyData.map(item => item[0]);
+const counts = dailyData.map(item => item[1]);
+
+new Chart(document.getElementById("dailyChart"), {
+    type: 'line',
+    data: {
+        labels: dates,
+        datasets: [{
+            label: "Daily Practice",
+            data: counts,
+            borderColor: "#2196F3",
+            fill: false,
+            tension: 0.3
+        }]
+    },
+    options: { responsive: true }
+});
+</script>
+
+</body>
+</html>

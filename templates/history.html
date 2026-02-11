@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conversation History</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="navbar">
+    <h1>MyTutor AI</h1>
+    <div class="nav-links">
+        <a href="/chat">Chat</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/history">History</a>
+        <a href="/export">Export</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<h2>Conversation History</h2>
+
+{% for message, response in records %}
+    <div class="user-msg">{{ message }}</div>
+    <div class="bot-msg">{{ response }}</div>
+{% endfor %}
+
+
+
+</body>
+</html>
