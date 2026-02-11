@@ -1,4 +1,4 @@
-# MyTutor AI 🧠✨
+# MyTutor AI 
 
 Offline AI-Based English Learning Assistant with Performance Analytics
 
